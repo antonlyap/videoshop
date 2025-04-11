@@ -69,6 +69,15 @@ class CatalogController {
 		return "catalog";
 	}
 
+	@GetMapping("/online")
+	String onlineCatalog(Model model) {
+
+		model.addAttribute("catalog", catalog.findByType(DiscType.ONLINE));
+		model.addAttribute("title", "catalog.online.title");
+
+		return "catalog";
+	}
+
 	// (｡◕‿◕｡)
 	// Befindet sich die angesurfte Url in der Form /foo/5 statt /foo?bar=5 so muss man @PathVariable benutzen
 	// Lektüre: http://spring.io/blog/2009/03/08/rest-in-spring-3-mvc/

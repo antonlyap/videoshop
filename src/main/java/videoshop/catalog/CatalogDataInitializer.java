@@ -88,11 +88,11 @@ class CatalogDataInitializer implements DataInitializer {
 		videoCatalog.save(new Disc("Top Secret!", "ts", 12, Money.of(39.99, EURO), "Comedy", DiscType.BLURAY));
 		videoCatalog
 				.save(new Disc("The Iron Giant", "tig", 16, Money.of(34.99, EURO), "Animation/Action/Adventure",
-						DiscType.BLURAY));
+						DiscType.ONLINE));
 		videoCatalog
-				.save(new Disc("Battle Royale", "br", 6, Money.of(19.99, EURO), "Action/Drama/Thriller", DiscType.BLURAY));
-		videoCatalog.save(new Disc("Oldboy", "old", 18, Money.of(24.99, EURO), "Action/Drama/Thriller", DiscType.BLURAY));
+				.save(new Disc("Battle Royale", "br", 6, Money.of(19.99, EURO), "Action/Drama/Thriller", DiscType.ONLINE));
+		videoCatalog.save(new Disc("Oldboy", "old", 18, Money.of(24.99, EURO), "Action/Drama/Thriller", DiscType.ONLINE));
 		videoCatalog.save(new Disc("Bill & Ted's Excellent Adventure", "bt", 0, Money.of(29.99, EURO),
-				"Adventure/Comedy/Family", DiscType.BLURAY));
+				"Adventure/Comedy/Family", DiscType.ONLINE));
 	}
 }
