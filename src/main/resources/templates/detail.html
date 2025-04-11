@@ -19,6 +19,7 @@
                         <div class="meta">
                             <span th:text="${disc.genre}">Action</span>
                             <span th:text="${{disc.price}}">9.99 €</span>
+                            <span th:text="'FSK ' + ${disc.age}">FSK 0</span>
                         </div>
                         <div class="description">
                             <p>Vorrat:</p>

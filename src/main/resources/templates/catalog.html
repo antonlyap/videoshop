@@ -23,7 +23,10 @@
                     </a>
                 </div>
                 <div class="content">
-                    <div class="description" th:text="${{disc.price}}">9.99 €</div>
+                    <div class="description">
+                        <span class="" th:text="${{disc.price}}">9.99 €</span>
+                        <span class="right floated" th:text="'FSK ' + ${disc.age}">FSK 0</span>
+                    </div>
                 </div>
                 <div class="extra content" th:text="${disc.genre}"> Action</div>
             </div>
