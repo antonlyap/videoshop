@@ -77,6 +77,7 @@ class CustomerDataInitializer implements DataInitializer {
 		LOG.info("Creating default users and customers.");
 
 		userAccountManagement.create("boss", UnencryptedPassword.of("123"), Role.of("BOSS"));
+		userAccountManagement.create("anonymous", UnencryptedPassword.of("anonymous"), Role.of("ANONYMOUS"));
 
 		var password = "123";
 

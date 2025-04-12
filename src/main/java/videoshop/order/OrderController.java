@@ -26,6 +26,7 @@ import org.salespointframework.order.OrderStatus;
 import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountManagement;
 import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -45,21 +46,26 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * @author Oliver Gierke
  */
 @Controller
-@PreAuthorize("isAuthenticated()")
+// @PreAuthorize("isAuthenticated()")
 @SessionAttributes("cart")
 class OrderController {
 
 	private final OrderManagement<Order> orderManagement;
+	private final UserAccountManagement userAccountManagement;
 
 	/**
 	 * Creates a new {@link OrderController} with the given {@link OrderManagement}.
 	 *
 	 * @param orderManagement must not be {@literal null}.
 	 */
-	OrderController(OrderManagement<Order> orderManagement) {
+	OrderController(
+		OrderManagement<Order> orderManagement,
+		UserAccountManagement userAccountManagement
+	) {
 
 		Assert.notNull(orderManagement, "OrderManagement must not be null!");
 		this.orderManagement = orderManagement;
+		this.userAccountManagement = userAccountManagement;
 	}
 
 	/**
@@ -122,23 +128,21 @@ class OrderController {
 	 */
 	@PostMapping("/checkout")
 	String buy(@ModelAttribute Cart cart, @LoggedIn Optional<UserAccount> userAccount) {
+		var account = userAccount.orElseGet(() -> userAccountManagement.findByUsername("anonymous").orElseThrow());
 
-		return userAccount.map(account -> {
+		// (｡◕‿◕｡)
+		// Mit completeOrder(…) wird der Warenkorb in die Order überführt, diese wird dann bezahlt und abgeschlossen.
+		// Orders können nur abgeschlossen werden, wenn diese vorher bezahlt wurden.
+		var order = new Order(account.getId(), Cash.CASH);
 
-			// (｡◕‿◕｡)
-			// Mit completeOrder(…) wird der Warenkorb in die Order überführt, diese wird dann bezahlt und abgeschlossen.
-			// Orders können nur abgeschlossen werden, wenn diese vorher bezahlt wurden.
-			var order = new Order(account.getId(), Cash.CASH);
+		cart.addItemsTo(order);
 
-			cart.addItemsTo(order);
+		orderManagement.payOrder(order);
+		orderManagement.completeOrder(order);
 
-			orderManagement.payOrder(order);
-			orderManagement.completeOrder(order);
+		cart.clear();
 
-			cart.clear();
-
-			return "redirect:/";
-		}).orElse("redirect:/cart");
+		return "redirect:/";
 	}
 
 	@GetMapping("/orders")
