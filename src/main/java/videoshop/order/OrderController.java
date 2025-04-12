@@ -16,9 +16,12 @@
 package videoshop.order;
 
 import videoshop.catalog.Disc;
+import videoshop.catalog.Disc.DiscType;
 
 import java.util.Optional;
 
+import org.salespointframework.catalog.Product;
+import org.salespointframework.core.AbstractEntity;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManagement;
@@ -29,6 +32,7 @@ import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManagement;
 import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -46,7 +50,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * @author Oliver Gierke
  */
 @Controller
-// @PreAuthorize("isAuthenticated()")
 @SessionAttributes("cart")
 class OrderController {
 
@@ -92,6 +95,10 @@ class OrderController {
 	 */
 	@PostMapping("/cart")
 	String addDisc(@RequestParam("pid") Disc disc, @RequestParam("number") int number, @ModelAttribute Cart cart) {
+		System.out.println(disc);
+		if (disc.getType() == DiscType.ONLINE) {
+			throw new InsufficientAuthenticationException("redirect");
+		}
 
 		// (｡◕‿◕｡)
 		// Das Inputfeld im View ist eigentlich begrenzt, allerdings sollte man immer auch serverseitig validieren
